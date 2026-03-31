@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Hidrômetro Messina</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f0f4f8; --surface: #ffffff; --border: #e2e8f0;
+      --text: #1a202c; --text-muted: #718096; --text-light: #a0aec0;
+      --blue: #2b6cb0; --blue-light: #ebf8ff; --blue-mid: #bee3f8;
+      --green: #276749; --green-light: #f0fff4; --green-mid: #9ae6b4;
+      --red: #9b2c2c; --red-light: #fff5f5; --red-mid: #feb2b2;
+      --radius: 12px; --radius-sm: 8px;
+    }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem 1rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; width: 100%; max-width: 480px; }
+    h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+    .sub { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; }
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 13px; font-weight: 500; color: var(--text-muted); margin-bottom: 6px; }
+    .field input { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 14px; font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); outline: none; }
+    .field input:focus { border-color: var(--blue); background: var(--surface); }
+    .field .hint { font-size: 12px; color: var(--text-light); margin-top: 5px; }
+    .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .btn { width: 100%; padding: 11px; font-size: 14px; font-weight: 500; border-radius: var(--radius-sm); cursor: pointer; font-family: 'DM Sans', sans-serif; border: 1px solid var(--border); background: var(--text); color: white; margin-top: 0.5rem; }
+    .btn:hover { opacity: 0.9; }
+    .divider { border: none; border-top: 1px solid var(--border); margin: 1.5rem 0; }
+    .current-box { background: var(--blue-light); border: 1px solid var(--blue-mid); border-radius: var(--radius-sm); padding: 12px 16px; margin-bottom: 1.5rem; }
+    .current-box .ctitle { font-size: 12px; font-weight: 500; color: var(--blue); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .current-box .crows { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    .current-box .crow { font-size: 13px; color: var(--blue); }
+    .current-box .crow span { font-family: 'DM Mono', monospace; font-weight: 500; }
+    .msg { display: none; padding: 12px 16px; border-radius: var(--radius-sm); font-size: 13px; margin-top: 1rem; text-align: center; }
+    .msg-ok { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
+    .msg-err { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+    #login-screen { }
+    #admin-screen { display: none; }
+    .back { font-size: 13px; color: var(--blue); text-decoration: none; display: inline-block; margin-top: 1rem; }
+    .back:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <!-- Tela de login -->
+  <div class="card" id="login-screen">
+    <h1>Área administrativa</h1>
+    <p class="sub">Acesso restrito — Messina Automação</p>
+    <div class="field">
+      <label>Senha</label>
+      <input type="password" id="senha-input" placeholder="Digite a senha" onkeydown="if(event.key==='Enter') entrar()" />
+    </div>
+    <button class="btn" onclick="entrar()">Entrar</button>
+    <div class="msg msg-err" id="msg-login">Senha incorreta.</div>
+    <br>
+    <a href="index.html" class="back">← Ver página do cliente</a>
+  </div>
+
+  <!-- Tela de admin -->
+  <div class="card" id="admin-screen">
+    <h1>Atualizar ciclo de leitura</h1>
+    <p class="sub">Preencha os dados da nova leitura da empresa</p>
+
+    <div class="current-box" id="ciclo-atual">
+      <div class="ctitle">Ciclo atual</div>
+      <div class="crows">
+        <div class="crow">Início: <span id="cur-inicio">—</span></div>
+        <div class="crow">Próxima: <span id="cur-proxima">—</span></div>
+        <div class="crow">Leitura inicial: <span id="cur-leitura">—</span> m³</div>
+        <div class="crow">Mínimo: <span id="cur-minimo">—</span> m³</div>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Data da leitura da empresa</label>
+        <input type="date" id="data-leitura" />
+      </div>
+      <div class="field">
+        <label>Data prevista próxima leitura</label>
+        <input type="date" id="data-proxima" />
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label>Valor na leitura (m³)</label>
+        <input type="number" id="valor-leitura" placeholder="Ex: 6100.50" step="0.01" />
+        <p class="hint">Valor no hidrômetro no dia da leitura</p>
+      </div>
+      <div class="field">
+        <label>Consumo mínimo do ciclo (m³)</label>
+        <input type="number" id="consumo-minimo" placeholder="Ex: 2160" step="0.01" />
+        <p class="hint">Deixe vazio para manter o atual</p>
+      </div>
+    </div>
+
+    <button class="btn" onclick="salvar()">Salvar novo ciclo</button>
+    <div class="msg msg-ok" id="msg-ok">✓ Configuração salva! O próximo relatório usará os novos valores.</div>
+    <div class="msg msg-err" id="msg-err">Preencha todos os campos obrigatórios.</div>
+
+    <hr class="divider">
+    <a href="index.html" class="back">← Ver página do cliente</a>
+  </div>
+
+  <script>
+    // DEFINA SUA SENHA AQUI
+    const SENHA = "messina2025";
+
+    function entrar() {
+      const s = document.getElementById('senha-input').value;
+      if (s === SENHA) {
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-screen').style.display = 'block';
+        carregarConfig();
+      } else {
+        document.getElementById('msg-login').style.display = 'block';
+      }
+    }
+
+    async function carregarConfig() {
+      try {
+        const resp = await fetch('dados/config.json?t=' + Date.now());
+        const cfg = await resp.json();
+        document.getElementById('cur-inicio').textContent = formatarData(cfg.data_leitura_inicial);
+        document.getElementById('cur-proxima').textContent = formatarData(cfg.data_proxima_leitura);
+        document.getElementById('cur-leitura').textContent = cfg.leitura_inicial_m3;
+        document.getElementById('cur-minimo').textContent = cfg.consumo_minimo_m3;
+        document.getElementById('consumo-minimo').placeholder = cfg.consumo_minimo_m3;
+      } catch(e) {}
+    }
+
+    async function salvar() {
+      const dataLeitura = document.getElementById('data-leitura').value;
+      const dataProxima = document.getElementById('data-proxima').value;
+      const valorLeitura = document.getElementById('valor-leitura').value;
+      const consumoMinimo = document.getElementById('consumo-minimo').value;
+
+      if (!dataLeitura || !dataProxima || !valorLeitura) {
+        document.getElementById('msg-err').style.display = 'block';
+        document.getElementById('msg-ok').style.display = 'none';
+        return;
+      }
+
+      // Monta o novo config.json
+      const novoConfig = {
+        leitura_inicial_m3: parseFloat(valorLeitura),
+        data_leitura_inicial: dataLeitura,
+        data_proxima_leitura: dataProxima,
+        consumo_minimo_m3: consumoMinimo ? parseFloat(consumoMinimo) : 2160.0,
+        url: "https://monitoramento.mdpd.com.br/main/supervisory/dashboard/ThNkAJvagP"
+      };
+
+      // Baixa o arquivo para o usuário salvar no repositório
+      const blob = new Blob([JSON.stringify(novoConfig, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'config.json';
+      a.click();
+
+      document.getElementById('msg-ok').style.display = 'block';
+      document.getElementById('msg-err').style.display = 'none';
+    }
+
+    function formatarData(iso) {
+      if (!iso) return '—';
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+  </script>
+</body>
+</html>
