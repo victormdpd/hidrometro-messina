@@ -1,0 +1,1 @@
+data,hora,valor_atual_m3,consumo_ciclo_m3,percentual_minimo,dias_decorridos,dias_restantes,dias_total,media_diaria_m3,projecao_m3,percentual_projecao,consumo_minimo_m3,leitura_inicial_m3,data_leitura_inicial,data_proxima_leitura,ultrapassou_minimo,status
