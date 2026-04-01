@@ -1,0 +1,39 @@
+name: Leitura Diária Hidrômetro
+
+on:
+  schedule:
+    - cron: '0 11 * * *'
+  workflow_dispatch:
+
+jobs:
+  leitura:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Executar leitura do hidrômetro
+        run: python scripts/leitura.py
+
+      - name: Commitar dados atualizados
+        run: |
+          git config --global user.name "hidrometro-bot"
+          git config --global user.email "bot@hidrometro"
+          git add dados/historico.csv dados/log.txt
+          git diff --staged --quiet || git commit -m "Leitura automática - $(date +'%d/%m/%Y %H:%M')"
+          git push
