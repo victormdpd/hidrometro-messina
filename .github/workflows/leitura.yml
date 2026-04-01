@@ -2,15 +2,15 @@ name: Leitura Diária Hidrômetro
 
 on:
   schedule:
-    - cron: '0 11 * * *'  # 8h horário de Brasília (UTC-3) = 11h UTC
-  workflow_dispatch:       # permite rodar manualmente pelo GitHub
+    - cron: '0 11 * * *'
+  workflow_dispatch:
 
 jobs:
   leitura:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write      # necessário para commitar o CSV atualizado
+      contents: write
 
     steps:
       - name: Checkout do repositório
@@ -22,10 +22,7 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar dependências
-        run: |
-          pip install playwright
-          playwright install chromium
-          playwright install-deps chromium
+        run: pip install requests --break-system-packages
 
       - name: Executar leitura do hidrômetro
         run: python scripts/leitura.py
