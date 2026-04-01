@@ -2,15 +2,15 @@ name: Leitura Diária Hidrômetro
 
 on:
   schedule:
-    - cron: '0 11 * * *'
-  workflow_dispatch:
+    - cron: '0 11 * * *'  # 8h horário de Brasília (UTC-3) = 11h UTC
+  workflow_dispatch:       # permite rodar manualmente pelo GitHub
 
 jobs:
   leitura:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write
+      contents: write      # necessário para commitar o CSV atualizado
 
     steps:
       - name: Checkout do repositório
