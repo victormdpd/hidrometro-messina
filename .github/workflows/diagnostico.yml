@@ -1,0 +1,37 @@
+name: Diagnóstico Hidrômetro
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnostico:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependências
+        run: |
+          pip install playwright
+          playwright install chromium
+          playwright install-deps chromium
+
+      - name: Executar diagnóstico
+        run: python scripts/diagnostico.py
+
+      - name: Salvar resultados
+        run: |
+          git config --global user.name "hidrometro-bot"
+          git config --global user.email "bot@hidrometro"
+          git add dados/screenshot.png dados/pagina.html
+          git diff --staged --quiet || git commit -m "Diagnóstico - $(date +'%d/%m/%Y %H:%M')"
+          git push
