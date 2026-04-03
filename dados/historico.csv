@@ -1,3 +1,4 @@
 data,hora,valor_atual_m3,consumo_ciclo_m3,percentual_minimo,dias_decorridos,dias_restantes,dias_total,media_diaria_m3,projecao_m3,percentual_projecao,consumo_minimo_m3,leitura_inicial_m3,data_leitura_inicial,data_proxima_leitura,ultrapassou_minimo,status
 01/04/2026,14:56,5914.3,1109.2,51.4,379,0,31,2.93,90.83,4.2,2160.0,4805.1,2025-03-18,2025-04-18,False,leitura_ok
 02/04/2026,14:41,5992.87,1187.77,55.0,15,16,31,79.18,2454.58,113.6,2160.0,4805.1,2026-03-18,2026-04-18,False,leitura_ok
+03/04/2026,12:05,6064.94,1259.84,58.3,16,15,31,78.74,2440.94,113.0,2160.0,4805.1,2026-03-18,2026-04-18,False,leitura_ok
