@@ -19,9 +19,11 @@ API_URL = "https://backend.metam.com.br/api/supervisory/public/ThNkAJvagP?timezo
 
 CONFIG_PADRAO = {
     "leitura_inicial_m3": 4805.1,
-    "data_leitura_inicial": "2025-03-18",
-    "data_proxima_leitura": "2025-04-18",
-    "consumo_minimo_m3": 2160.0
+    "data_leitura_inicial": "2026-03-18",
+    "data_proxima_leitura": "2026-04-18",
+    "consumo_minimo_m3": 2160.0,
+    "tarifa_minimo": 7.4143,
+    "tarifa_excedente": 16.3115
 }
 
 MAX_TENTATIVAS = 4
@@ -40,7 +42,12 @@ def log(msg):
 def carregar_config():
     if CONFIG_FILE.exists():
         with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-            return json.load(f)
+            cfg = json.load(f)
+        if "tarifa_minimo" not in cfg:
+            cfg["tarifa_minimo"] = 7.4143
+        if "tarifa_excedente" not in cfg:
+            cfg["tarifa_excedente"] = 16.3115
+        return cfg
     return CONFIG_PADRAO
 
 
@@ -66,12 +73,22 @@ def capturar_com_retry():
     raise RuntimeError(f"Falha apos {MAX_TENTATIVAS} tentativas.")
 
 
+def calcular_custo(consumo_m3, minimo, tarifa_minimo, tarifa_excedente):
+    custo_minimo = minimo * tarifa_minimo * 2
+    if consumo_m3 <= minimo:
+        return round(custo_minimo, 2)
+    excedente = consumo_m3 - minimo
+    return round(custo_minimo + (excedente * tarifa_excedente * 2), 2)
+
+
 def calcular_dados(valor_atual, config):
     hoje = date.today()
     data_inicial = date.fromisoformat(config["data_leitura_inicial"])
     data_proxima = date.fromisoformat(config["data_proxima_leitura"])
     minimo = config["consumo_minimo_m3"]
     leitura_inicial = config["leitura_inicial_m3"]
+    tarifa_minimo = config["tarifa_minimo"]
+    tarifa_excedente = config["tarifa_excedente"]
 
     dias_total = (data_proxima - data_inicial).days
     dias_decorridos = (hoje - data_inicial).days
@@ -82,6 +99,9 @@ def calcular_dados(valor_atual, config):
     media_diaria = round(consumo / dias_decorridos, 2) if dias_decorridos > 0 else 0
     projecao = round(media_diaria * dias_total, 2)
     percentual_projecao = round((projecao / minimo) * 100, 1)
+
+    custo_atual = calcular_custo(consumo, minimo, tarifa_minimo, tarifa_excedente)
+    custo_projecao = calcular_custo(projecao, minimo, tarifa_minimo, tarifa_excedente)
 
     return {
         "data": hoje.strftime("%d/%m/%Y"),
@@ -95,6 +115,8 @@ def calcular_dados(valor_atual, config):
         "media_diaria_m3": media_diaria,
         "projecao_m3": projecao,
         "percentual_projecao": percentual_projecao,
+        "custo_atual_reais": custo_atual,
+        "custo_projecao_reais": custo_projecao,
         "consumo_minimo_m3": minimo,
         "leitura_inicial_m3": leitura_inicial,
         "data_leitura_inicial": config["data_leitura_inicial"],
@@ -110,7 +132,8 @@ def salvar_csv(dados):
         "data", "hora", "valor_atual_m3", "consumo_ciclo_m3",
         "percentual_minimo", "dias_decorridos", "dias_restantes",
         "dias_total", "media_diaria_m3", "projecao_m3",
-        "percentual_projecao", "consumo_minimo_m3", "leitura_inicial_m3",
+        "percentual_projecao", "custo_atual_reais", "custo_projecao_reais",
+        "consumo_minimo_m3", "leitura_inicial_m3",
         "data_leitura_inicial", "data_proxima_leitura",
         "ultrapassou_minimo", "status"
     ]
@@ -123,7 +146,7 @@ def salvar_csv(dados):
                     linhas.append(row)
     linhas.append(dados)
     with open(CSV_FILE, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=campos)
+        writer = csv.DictWriter(f, fieldnames=campos, extrasaction='ignore')
         writer.writeheader()
         writer.writerows(linhas)
     log(f"Salvo em: {CSV_FILE}")
@@ -134,7 +157,8 @@ def salvar_falha():
         "data", "hora", "valor_atual_m3", "consumo_ciclo_m3",
         "percentual_minimo", "dias_decorridos", "dias_restantes",
         "dias_total", "media_diaria_m3", "projecao_m3",
-        "percentual_projecao", "consumo_minimo_m3", "leitura_inicial_m3",
+        "percentual_projecao", "custo_atual_reais", "custo_projecao_reais",
+        "consumo_minimo_m3", "leitura_inicial_m3",
         "data_leitura_inicial", "data_proxima_leitura",
         "ultrapassou_minimo", "status"
     ]
@@ -156,7 +180,8 @@ def main():
         salvar_csv(dados)
         log(f"Consumo no ciclo: {dados['consumo_ciclo_m3']} m3")
         log(f"% do minimo: {dados['percentual_minimo']}%")
-        log(f"Projecao: {dados['projecao_m3']} m3 ({dados['percentual_projecao']}%)")
+        log(f"Custo atual: R$ {dados['custo_atual_reais']}")
+        log(f"Custo projecao: R$ {dados['custo_projecao_reais']}")
         if dados["ultrapassou_minimo"]:
             log("ATENCAO: Consumo minimo ultrapassado!")
     except Exception as e:
