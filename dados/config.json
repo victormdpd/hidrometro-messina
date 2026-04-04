@@ -2,5 +2,7 @@
   "leitura_inicial_m3": 4805.1,
   "data_leitura_inicial": "2026-03-18",
   "data_proxima_leitura": "2026-04-18",
-  "consumo_minimo_m3": 2160.0
+  "consumo_minimo_m3": 2160.0,
+  "tarifa_minimo": 7.4143,
+  "tarifa_excedente": 16.3115
 }
