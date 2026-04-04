@@ -25,9 +25,13 @@ jobs:
         run: pip install requests --break-system-packages
 
       - name: Executar leitura do hidrômetro
+        env:
+          TZ: America/Sao_Paulo
         run: python scripts/leitura.py
 
       - name: Commitar dados atualizados
+        env:
+          TZ: America/Sao_Paulo
         run: |
           git config --global user.name "hidrometro-bot"
           git config --global user.email "bot@hidrometro"
