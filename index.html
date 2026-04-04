@@ -7,288 +7,70 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg: #f0f4f8;
-      --surface: #ffffff;
-      --surface2: #f7f9fc;
-      --border: #e2e8f0;
-      --text: #1a202c;
-      --text-muted: #718096;
-      --text-light: #a0aec0;
-      --blue: #2b6cb0;
-      --blue-light: #ebf8ff;
-      --blue-mid: #bee3f8;
-      --green: #276749;
-      --green-light: #f0fff4;
-      --green-mid: #9ae6b4;
-      --amber: #975a16;
-      --amber-light: #fffbeb;
-      --amber-mid: #fbd38d;
-      --red: #9b2c2c;
-      --red-light: #fff5f5;
-      --red-mid: #feb2b2;
-      --accent: #2b6cb0;
-      --radius: 12px;
-      --radius-sm: 8px;
+      --bg: #f0f4f8; --surface: #ffffff; --surface2: #f7f9fc; --border: #e2e8f0;
+      --text: #1a202c; --text-muted: #718096; --text-light: #a0aec0;
+      --blue: #2b6cb0; --blue-light: #ebf8ff; --blue-mid: #bee3f8;
+      --green: #276749; --green-light: #f0fff4; --green-mid: #9ae6b4;
+      --amber: #975a16; --amber-light: #fffbeb; --amber-mid: #fbd38d;
+      --red: #9b2c2c; --red-light: #fff5f5; --red-mid: #feb2b2;
+      --radius: 12px; --radius-sm: 8px;
     }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 2rem 1rem;
-    }
-
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
     .container { max-width: 860px; margin: 0 auto; }
-
-    header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .logo-area h1 {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: -0.3px;
-    }
-
-    .logo-area p {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .updated {
-      font-size: 12px;
-      color: var(--text-light);
-      font-family: 'DM Mono', monospace;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 6px 12px;
-      border-radius: 20px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 1.25rem;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-    }
-
-    .card .label {
-      font-size: 12px;
-      color: var(--text-muted);
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
-    }
-
-    .card .value {
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1;
-    }
-
-    .card .unit {
-      font-size: 14px;
-      font-weight: 400;
-      color: var(--text-muted);
-      margin-left: 2px;
-    }
-
-    .card .sub {
-      font-size: 12px;
-      color: var(--text-light);
-      margin-top: 6px;
-    }
-
-    .gauge-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.5rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .gauge-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 1.25rem;
-    }
-
-    .gauge-header h2 {
-      font-size: 15px;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .gauge-header p {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-top: 3px;
-    }
-
-    .badge {
-      font-size: 12px;
-      font-weight: 500;
-      padding: 4px 12px;
-      border-radius: 20px;
-      white-space: nowrap;
-    }
-
+    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+    .logo-area h1 { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
+    .logo-area p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    .updated { font-size: 12px; color: var(--text-light); font-family: 'DM Mono', monospace; background: var(--surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; }
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .card .label { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .card .value { font-size: 26px; font-weight: 600; color: var(--text); line-height: 1; }
+    .card .unit { font-size: 13px; font-weight: 400; color: var(--text-muted); margin-left: 2px; }
+    .card .sub { font-size: 12px; color: var(--text-light); margin-top: 6px; }
+    .gauge-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.25rem; }
+    .gauge-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 8px; }
+    .gauge-header h2 { font-size: 15px; font-weight: 500; color: var(--text); }
+    .gauge-header p { font-size: 13px; color: var(--text-muted); margin-top: 3px; }
+    .badge { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 20px; white-space: nowrap; }
     .badge-ok { background: var(--green-light); color: var(--green); border: 1px solid var(--green-mid); }
     .badge-warn { background: var(--amber-light); color: var(--amber); border: 1px solid var(--amber-mid); }
     .badge-over { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
-
-    .gauge-track {
-      height: 32px;
-      background: var(--bg);
-      border-radius: 16px;
-      overflow: hidden;
-      position: relative;
-      margin-bottom: 8px;
-    }
-
-    .gauge-fill {
-      height: 100%;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      padding-left: 14px;
-      font-size: 13px;
-      font-weight: 600;
-      color: white;
-      transition: width 1s cubic-bezier(0.4,0,0.2,1);
-      min-width: 60px;
-    }
-
-    .fill-ok { background: linear-gradient(90deg, #38a169, #48bb78); }
-    .fill-warn { background: linear-gradient(90deg, #d69e2e, #ecc94b); }
-    .fill-over { background: linear-gradient(90deg, #e53e3e, #fc8181); }
-
-    .gauge-labels {
-      display: flex;
-      justify-content: space-between;
-      font-size: 11px;
-      color: var(--text-light);
-      font-family: 'DM Mono', monospace;
-    }
-
-    .proj-box {
-      margin-top: 1rem;
-      background: var(--blue-light);
-      border: 1px solid var(--blue-mid);
-      border-radius: var(--radius-sm);
-      padding: 12px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
+    .gauge-track { height: 30px; background: var(--bg); border-radius: 15px; overflow: hidden; margin-bottom: 8px; }
+    .gauge-fill { height: 100%; border-radius: 15px; display: flex; align-items: center; padding-left: 14px; font-size: 13px; font-weight: 600; color: white; min-width: 60px; }
+    .fill-ok { background: #38a169; }
+    .fill-warn { background: #d69e2e; }
+    .fill-over { background: #e53e3e; }
+    .gauge-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-light); font-family: 'DM Mono', monospace; }
+    .proj-box { margin-top: 1rem; background: var(--blue-light); border: 1px solid var(--blue-mid); border-radius: var(--radius-sm); padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
     .proj-box .proj-label { font-size: 13px; color: var(--blue); }
     .proj-box .proj-value { font-size: 15px; font-weight: 600; color: var(--blue); font-family: 'DM Mono', monospace; }
-
-    .hist-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      margin-bottom: 1.25rem;
-    }
-
-    .hist-header {
-      padding: 1rem 1.25rem;
-      border-bottom: 1px solid var(--border);
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text);
-    }
-
-    .hist-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 80px;
-      align-items: center;
-      padding: 12px 1.25rem;
-      border-bottom: 1px solid var(--border);
-      font-size: 13px;
-      gap: 8px;
-    }
-
+    .cost-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 6px; }
+    .cost-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
+    .cost-card .clabel { font-size: 12px; color: var(--text-muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .cost-card .cvalue { font-size: 24px; font-weight: 600; color: var(--text); line-height: 1; }
+    .cost-card .csub { font-size: 12px; color: var(--text-light); margin-top: 6px; }
+    .cost-card.proj { background: var(--amber-light); border-color: var(--amber-mid); }
+    .cost-card.proj .clabel { color: var(--amber); }
+    .cost-card.proj .cvalue { color: var(--amber); }
+    .cost-card.proj .csub { color: var(--amber); opacity: 0.8; }
+    .disclaimer { font-size: 11px; color: var(--text-light); text-align: center; margin-bottom: 1.25rem; }
+    .hist-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 1.25rem; }
+    .hist-header { padding: 1rem 1.25rem; border-bottom: 1px solid var(--border); font-size: 14px; font-weight: 500; color: var(--text); }
+    .hist-row { display: grid; grid-template-columns: 1fr 1fr 1fr 80px; align-items: center; padding: 12px 1.25rem; border-bottom: 1px solid var(--border); font-size: 13px; gap: 8px; }
     .hist-row:last-child { border-bottom: none; }
-    .hist-row.header-row {
-      background: var(--surface2);
-      font-size: 11px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-    }
-
-    .hist-row .mono { font-family: 'DM Mono', monospace; }
-    .hist-row .right { text-align: right; }
-
-    .mini-bar {
-      height: 6px;
-      background: var(--bg);
-      border-radius: 3px;
-      overflow: hidden;
-      margin-top: 4px;
-    }
-
-    .mini-fill {
-      height: 100%;
-      border-radius: 3px;
-    }
-
-    .falha-row {
-      background: var(--red-light);
-      color: var(--red);
-      font-style: italic;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: var(--text-light);
-      margin-top: 2rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-    }
-
-    #loading {
-      text-align: center;
-      padding: 4rem;
-      color: var(--text-muted);
-      font-size: 14px;
-    }
-
-    #erro {
-      display: none;
-      text-align: center;
-      padding: 3rem;
-      color: var(--red);
-      background: var(--red-light);
-      border-radius: var(--radius);
-      font-size: 14px;
+    .hist-row.header-row { background: var(--surface2); font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); }
+    .mono { font-family: 'DM Mono', monospace; }
+    .right { text-align: right; }
+    .mini-bar { height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-top: 4px; }
+    .mini-fill { height: 100%; border-radius: 3px; }
+    footer { text-align: center; font-size: 12px; color: var(--text-light); margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    #loading { text-align: center; padding: 4rem; color: var(--text-muted); font-size: 14px; }
+    #erro { display: none; text-align: center; padding: 3rem; color: var(--red); background: var(--red-light); border-radius: var(--radius); font-size: 14px; }
+    @media (max-width: 500px) {
+      .cost-grid { grid-template-columns: 1fr; }
+      .hist-row { grid-template-columns: 1fr 1fr; }
+      .hist-row .hide-mobile { display: none; }
     }
   </style>
 </head>
@@ -296,83 +78,86 @@
   <div class="container">
     <header>
       <div class="logo-area">
-        <h1>Monitoramento de Consumo</h1>
+        <h1>Monitoramento de consumo</h1>
         <p>Messina — Hidrômetro</p>
       </div>
       <span class="updated" id="updated">Carregando...</span>
     </header>
-
     <div id="loading">Carregando dados...</div>
     <div id="erro">Não foi possível carregar os dados. Tente novamente mais tarde.</div>
     <div id="conteudo" style="display:none"></div>
-
     <footer>Dados atualizados automaticamente todo dia às 08h &nbsp;·&nbsp; Messina Automação</footer>
   </div>
 
   <script>
+    function brl(v) {
+      return parseFloat(v).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+    function m3(v) {
+      return parseFloat(v).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function cor(pct) {
+      if (pct >= 100) return { badge: 'badge-over', fill: 'fill-over', hex: '#e53e3e', label: 'Mínimo ultrapassado' };
+      if (pct >= 80)  return { badge: 'badge-warn', fill: 'fill-warn', hex: '#d69e2e', label: 'Atenção' };
+      return { badge: 'badge-ok', fill: 'fill-ok', hex: '#38a169', label: 'Dentro do limite' };
+    }
+    function isoParaBr(iso) {
+      if (!iso) return '';
+      const [y,m,d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
     async function carregar() {
       try {
         const resp = await fetch('dados/historico.csv?t=' + Date.now());
         const texto = await resp.text();
         const linhas = texto.trim().split('\n').filter(Boolean);
         if (linhas.length < 2) throw new Error('Sem dados');
-
-        const cabecalho = linhas[0].split(',');
+        const cab = linhas[0].split(',');
         const dados = linhas.slice(1).map(l => {
           const vals = l.split(',');
           const obj = {};
-          cabecalho.forEach((k, i) => obj[k.trim()] = vals[i]?.trim() || '');
+          cab.forEach((k, i) => obj[k.trim()] = vals[i]?.trim() || '');
           return obj;
         });
-
         const ultimo = dados[dados.length - 1];
         renderizar(ultimo, dados.reverse());
-
         document.getElementById('loading').style.display = 'none';
         document.getElementById('conteudo').style.display = 'block';
         document.getElementById('updated').textContent = `Atualizado em ${ultimo.data} às ${ultimo.hora}`;
-
-      } catch (e) {
+      } catch(e) {
         document.getElementById('loading').style.display = 'none';
         document.getElementById('erro').style.display = 'block';
       }
     }
 
-    function cor(pct) {
-      if (pct >= 100) return { badge: 'badge-over', fill: 'fill-over', hex: '#e53e3e' };
-      if (pct >= 80)  return { badge: 'badge-warn', fill: 'fill-warn', hex: '#d69e2e' };
-      return { badge: 'badge-ok', fill: 'fill-ok', hex: '#38a169' };
-    }
-
-    function renderizar(ultimo, historico) {
-      const pct = parseFloat(ultimo.percentual_minimo) || 0;
-      const pctProj = parseFloat(ultimo.percentual_projecao) || 0;
+    function renderizar(u, historico) {
+      const pct = parseFloat(u.percentual_minimo) || 0;
+      const pctProj = parseFloat(u.percentual_projecao) || 0;
       const c = cor(pct);
       const cProj = cor(pctProj);
-
-      const label = pct >= 100 ? 'Mínimo ultrapassado' : pct >= 80 ? 'Atenção' : 'Dentro do limite';
 
       document.getElementById('conteudo').innerHTML = `
         <div class="cards">
           <div class="card">
             <div class="label">Leitura atual</div>
-            <div class="value">${parseFloat(ultimo.valor_atual_m3).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}<span class="unit">m³</span></div>
-            <div class="sub">Hidrômetro em ${ultimo.data}</div>
+            <div class="value">${m3(u.valor_atual_m3)}<span class="unit"> m³</span></div>
+            <div class="sub">Hidrômetro em ${u.data}</div>
           </div>
           <div class="card">
             <div class="label">Consumo no ciclo</div>
-            <div class="value">${parseFloat(ultimo.consumo_ciclo_m3).toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2})}<span class="unit">m³</span></div>
-            <div class="sub">Desde ${formatarData(ultimo.data_leitura_inicial)}</div>
+            <div class="value">${m3(u.consumo_ciclo_m3)}<span class="unit"> m³</span></div>
+            <div class="sub">Desde ${isoParaBr(u.data_leitura_inicial)}</div>
           </div>
           <div class="card">
             <div class="label">Mínimo do ciclo</div>
-            <div class="value">${parseFloat(ultimo.consumo_minimo_m3).toLocaleString('pt-BR')}<span class="unit">m³</span></div>
+            <div class="value">${m3(u.consumo_minimo_m3)}<span class="unit"> m³</span></div>
             <div class="sub">Referência do contrato</div>
           </div>
           <div class="card">
             <div class="label">Dias restantes</div>
-            <div class="value">${ultimo.dias_restantes}<span class="unit">dias</span></div>
-            <div class="sub">Próx. leitura: ${formatarData(ultimo.data_proxima_leitura)}</div>
+            <div class="value">${u.dias_restantes}<span class="unit"> dias</span></div>
+            <div class="sub">Próx. leitura: ${isoParaBr(u.data_proxima_leitura)}</div>
           </div>
         </div>
 
@@ -380,62 +165,61 @@
           <div class="gauge-header">
             <div>
               <h2>Consumo em relação ao mínimo</h2>
-              <p>${ultimo.consumo_ciclo_m3} m³ de ${ultimo.consumo_minimo_m3} m³ · ${ultimo.dias_decorridos} de ${ultimo.dias_total} dias</p>
+              <p>${m3(u.consumo_ciclo_m3)} m³ de ${m3(u.consumo_minimo_m3)} m³ &nbsp;·&nbsp; ${u.dias_decorridos} de ${u.dias_total} dias</p>
             </div>
-            <span class="badge ${c.badge}">${label}</span>
+            <span class="badge ${c.badge}">${c.label}</span>
           </div>
-
           <div class="gauge-track">
-            <div class="gauge-fill ${c.fill}" style="width: ${Math.min(pct, 100)}%">
-              ${pct}%
-            </div>
+            <div class="gauge-fill ${c.fill}" style="width:${Math.min(pct,100)}%">${pct}%</div>
           </div>
-          <div class="gauge-labels">
-            <span>0%</span>
-            <span>50%</span>
-            <span>100% (mínimo)</span>
-          </div>
-
+          <div class="gauge-labels"><span>0%</span><span>50%</span><span>100% (mínimo)</span></div>
           <div class="proj-box">
-            <span class="proj-label">Projeção até ${formatarData(ultimo.data_proxima_leitura)}</span>
-            <span class="proj-value">${parseFloat(ultimo.projecao_m3).toLocaleString('pt-BR', {minimumFractionDigits:2})} m³ &nbsp;·&nbsp; <span class="${cProj.badge.replace('badge-','')}" style="color:inherit">${pctProj}% do mínimo</span></span>
+            <span class="proj-label">Projeção até ${isoParaBr(u.data_proxima_leitura)}</span>
+            <span class="proj-value">${m3(u.projecao_m3)} m³ &nbsp;·&nbsp; ${pctProj}% do mínimo</span>
           </div>
         </div>
+
+        <div class="cost-grid">
+          <div class="cost-card">
+            <div class="clabel">Custo estimado atual</div>
+            <div class="cvalue">${brl(u.custo_atual_reais)}</div>
+            <div class="csub">Água + esgoto · ${u.data}</div>
+          </div>
+          <div class="cost-card proj">
+            <div class="clabel">Custo estimado (projeção)</div>
+            <div class="cvalue">${brl(u.custo_projecao_reais)}</div>
+            <div class="csub">Água + esgoto · até ${isoParaBr(u.data_proxima_leitura)}</div>
+          </div>
+        </div>
+        <p class="disclaimer">Valores estimados de água + esgoto, sem taxas, juros e multas</p>
 
         <div class="hist-card">
           <div class="hist-header">Histórico de leituras</div>
           <div class="hist-row header-row">
             <span>Data</span>
             <span>Leitura (m³)</span>
-            <span>Consumo no ciclo</span>
+            <span class="hide-mobile">Consumo no ciclo</span>
             <span class="right">% mínimo</span>
           </div>
-          ${historico.slice(0, 10).map(d => {
+          ${historico.slice(0,10).map(d => {
             if (d.status === 'falha_leitura') {
-              return `<div class="hist-row falha-row"><span>${d.data}</span><span colspan="3">Falha na leitura</span><span></span><span></span></div>`;
+              return `<div class="hist-row" style="color:#9b2c2c;font-style:italic"><span>${d.data}</span><span>Falha na leitura</span><span></span><span></span></div>`;
             }
             const p = parseFloat(d.percentual_minimo) || 0;
             const cc = cor(p);
             return `
               <div class="hist-row">
                 <span class="mono">${d.data}</span>
-                <span class="mono">${parseFloat(d.valor_atual_m3).toLocaleString('pt-BR', {minimumFractionDigits:2})}</span>
-                <span>
-                  ${parseFloat(d.consumo_ciclo_m3).toLocaleString('pt-BR', {minimumFractionDigits:2})} m³
-                  <div class="mini-bar"><div class="mini-fill" style="width:${Math.min(p,100)}%; background:${cc.hex}"></div></div>
+                <span class="mono">${m3(d.valor_atual_m3)}</span>
+                <span class="hide-mobile">
+                  ${m3(d.consumo_ciclo_m3)} m³
+                  <div class="mini-bar"><div class="mini-fill" style="width:${Math.min(p,100)}%;background:${cc.hex}"></div></div>
                 </span>
                 <span class="right"><span class="badge ${cc.badge}">${p}%</span></span>
-              </div>
-            `;
+              </div>`;
           }).join('')}
         </div>
       `;
-    }
-
-    function formatarData(iso) {
-      if (!iso) return '';
-      const [y, m, d] = iso.split('-');
-      return `${d}/${m}/${y}`;
     }
 
     carregar();
