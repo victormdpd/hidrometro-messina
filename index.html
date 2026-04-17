@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Monitoramento de Consumo — Cond. Villa Messina - MD PACKET DIGITAL</title>
+  <title>Monitoramento de Consumo — Messina</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -16,11 +16,14 @@
       --red: #9b2c2c; --red-light: #fff5f5; --red-mid: #feb2b2;
       --radius: 12px; --radius-sm: 8px;
     }
-    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 2rem 1rem; }
-    .container { max-width: 860px; margin: 0 auto; }
-    header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
-    .logo-area h1 { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
-    .logo-area p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0 0 2rem; }
+    .topbar { background: #0a0a0a; padding: 14px 2rem; display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .topbar img { height: 36px; width: auto; }
+    .topbar .tagline { font-size: 12px; color: #888; font-family: 'DM Mono', monospace; }
+    .container { max-width: 860px; margin: 0 auto; padding: 0 1rem; }
+    .page-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+    .page-header h1 { font-size: 20px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
+    .page-header p { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
     .updated { font-size: 12px; color: var(--text-light); font-family: 'DM Mono', monospace; background: var(--surface); border: 1px solid var(--border); padding: 6px 12px; border-radius: 20px; }
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
@@ -64,30 +67,43 @@
     .right { text-align: right; }
     .mini-bar { height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-top: 4px; }
     .mini-fill { height: 100%; border-radius: 3px; }
-    footer { text-align: center; font-size: 12px; color: var(--text-light); margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+    footer { background: #0a0a0a; margin-top: 2rem; padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    footer img { height: 28px; width: auto; opacity: 0.9; }
+    footer p { font-size: 12px; color: #666; }
     #loading { text-align: center; padding: 4rem; color: var(--text-muted); font-size: 14px; }
-    #erro { display: none; text-align: center; padding: 3rem; color: var(--red); background: var(--red-light); border-radius: var(--radius); font-size: 14px; }
+    #erro { display: none; text-align: center; padding: 3rem; color: var(--red); background: var(--red-light); border-radius: var(--radius); font-size: 14px; margin: 1rem; }
     @media (max-width: 500px) {
       .cost-grid { grid-template-columns: 1fr; }
       .hist-row { grid-template-columns: 1fr 1fr; }
       .hist-row .hide-mobile { display: none; }
+      .topbar .tagline { display: none; }
     }
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <img src="logo.png" alt="MD Packet Digital" />
+    <span class="tagline">Monitoramento Inteligente</span>
+  </div>
+
   <div class="container">
-    <header>
-      <div class="logo-area">
+    <div class="page-header">
+      <div>
         <h1>Monitoramento de consumo</h1>
         <p>Messina — Hidrômetro</p>
       </div>
       <span class="updated" id="updated">Carregando...</span>
-    </header>
+    </div>
+
     <div id="loading">Carregando dados...</div>
     <div id="erro">Não foi possível carregar os dados. Tente novamente mais tarde.</div>
     <div id="conteudo" style="display:none"></div>
-    <footer>Dados atualizados automaticamente todo dia às 08h &nbsp;·&nbsp; Messina Automação</footer>
   </div>
+
+  <footer>
+    <img src="logo.png" alt="MD Packet Digital" />
+    <p>Dados atualizados automaticamente · MD Packet Digital</p>
+  </footer>
 
   <script>
     function brl(v) {
