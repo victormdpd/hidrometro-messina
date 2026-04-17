@@ -1,6 +1,5 @@
 """
 Leitura Automática de Hidrômetro - Messina Automação
-Busca dados direto da API pública - sem navegador
 """
 
 import csv
@@ -18,10 +17,11 @@ LOG_FILE = ROOT / "dados" / "log.txt"
 API_URL = "https://backend.metam.com.br/api/supervisory/public/ThNkAJvagP?timezone=America%2FSao_Paulo"
 
 CONFIG_PADRAO = {
-    "leitura_inicial_m3": 4805.1,
-    "data_leitura_inicial": "2026-03-18",
-    "data_proxima_leitura": "2026-04-18",
+    "leitura_inicial_m3": 6982.53,
+    "data_leitura_inicial": "2026-04-15",
+    "data_proxima_leitura": "2026-05-15",
     "consumo_minimo_m3": 2160.0,
+    "tarifa_dentro_minimo": 6.4720,
     "tarifa_minimo": 7.4143,
     "tarifa_excedente": 16.3115
 }
@@ -43,10 +43,9 @@ def carregar_config():
     if CONFIG_FILE.exists():
         with open(CONFIG_FILE, "r", encoding="utf-8") as f:
             cfg = json.load(f)
-        if "tarifa_minimo" not in cfg:
-            cfg["tarifa_minimo"] = 7.4143
-        if "tarifa_excedente" not in cfg:
-            cfg["tarifa_excedente"] = 16.3115
+        cfg.setdefault("tarifa_dentro_minimo", 6.4720)
+        cfg.setdefault("tarifa_minimo", 7.4143)
+        cfg.setdefault("tarifa_excedente", 16.3115)
         return cfg
     return CONFIG_PADRAO
 
@@ -54,8 +53,7 @@ def carregar_config():
 def capturar_leitura():
     resp = requests.get(API_URL, timeout=15)
     resp.raise_for_status()
-    dados = resp.json()
-    return float(dados["widgets"][0]["data"]["value"])
+    return float(resp.json()["widgets"][0]["data"]["value"])
 
 
 def capturar_com_retry():
@@ -73,12 +71,15 @@ def capturar_com_retry():
     raise RuntimeError(f"Falha apos {MAX_TENTATIVAS} tentativas.")
 
 
-def calcular_custo(consumo_m3, minimo, tarifa_minimo, tarifa_excedente):
-    custo_minimo = minimo * tarifa_minimo * 2
+def calcular_custo(consumo_m3, minimo, tarifa_dentro_minimo, tarifa_minimo, tarifa_excedente):
     if consumo_m3 <= minimo:
-        return round(custo_minimo, 2)
-    excedente = consumo_m3 - minimo
-    return round(custo_minimo + (excedente * tarifa_excedente * 2), 2)
+        # Dentro do mínimo: cobra o mínimo fixo com tarifa menor
+        custo_agua = minimo * tarifa_dentro_minimo
+    else:
+        # Acima do mínimo: tarifa maior nos primeiros 2160 + excedente
+        excedente = consumo_m3 - minimo
+        custo_agua = (minimo * tarifa_minimo) + (excedente * tarifa_excedente)
+    return round(custo_agua * 2, 2)  # x2 = água + esgoto
 
 
 def calcular_dados(valor_atual, config):
@@ -87,6 +88,7 @@ def calcular_dados(valor_atual, config):
     data_proxima = date.fromisoformat(config["data_proxima_leitura"])
     minimo = config["consumo_minimo_m3"]
     leitura_inicial = config["leitura_inicial_m3"]
+    tarifa_dentro_minimo = config["tarifa_dentro_minimo"]
     tarifa_minimo = config["tarifa_minimo"]
     tarifa_excedente = config["tarifa_excedente"]
 
@@ -100,8 +102,8 @@ def calcular_dados(valor_atual, config):
     projecao = round(media_diaria * dias_total, 2)
     percentual_projecao = round((projecao / minimo) * 100, 1)
 
-    custo_atual = calcular_custo(consumo, minimo, tarifa_minimo, tarifa_excedente)
-    custo_projecao = calcular_custo(projecao, minimo, tarifa_minimo, tarifa_excedente)
+    custo_atual = calcular_custo(consumo, minimo, tarifa_dentro_minimo, tarifa_minimo, tarifa_excedente)
+    custo_projecao = calcular_custo(projecao, minimo, tarifa_dentro_minimo, tarifa_minimo, tarifa_excedente)
 
     return {
         "data": hoje.strftime("%d/%m/%Y"),
@@ -142,7 +144,7 @@ def salvar_csv(dados):
         with open(CSV_FILE, "r", encoding="utf-8") as f:
             reader = csv.DictReader(f)
             for row in reader:
-                if row.get("data") != dados["data"]:
+                if row.get("data") != dados["data"] or row.get("hora") != dados["hora"]:
                     linhas.append(row)
     linhas.append(dados)
     with open(CSV_FILE, "w", newline="", encoding="utf-8") as f:
