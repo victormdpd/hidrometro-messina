@@ -73,13 +73,11 @@ def capturar_com_retry():
 
 def calcular_custo(consumo_m3, minimo, tarifa_dentro_minimo, tarifa_minimo, tarifa_excedente):
     if consumo_m3 <= minimo:
-        # Dentro do mínimo: cobra o mínimo fixo com tarifa menor
         custo_agua = minimo * tarifa_dentro_minimo
     else:
-        # Acima do mínimo: tarifa maior nos primeiros 2160 + excedente
         excedente = consumo_m3 - minimo
         custo_agua = (minimo * tarifa_minimo) + (excedente * tarifa_excedente)
-    return round(custo_agua * 2, 2)  # x2 = água + esgoto
+    return round(custo_agua * 2, 2)
 
 
 def calcular_dados(valor_atual, config):
@@ -186,6 +184,14 @@ def main():
         log(f"Custo projecao: R$ {dados['custo_projecao_reais']}")
         if dados["ultrapassou_minimo"]:
             log("ATENCAO: Consumo minimo ultrapassado!")
+
+        # Verificar e enviar alertas por e-mail
+        try:
+            from email_alerta import verificar_e_enviar
+            verificar_e_enviar(dados)
+        except Exception as e:
+            log(f"Erro no envio de alerta: {e}")
+
     except Exception as e:
         log(f"FALHA TOTAL: {e}")
         salvar_falha()
