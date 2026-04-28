@@ -32,6 +32,7 @@ jobs:
       - name: Executar leitura do hidrômetro
         env:
           TZ: America/Sao_Paulo
+          SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
         run: python scripts/leitura.py
 
       - name: Commitar dados atualizados
@@ -40,6 +41,6 @@ jobs:
         run: |
           git config --global user.name "hidrometro-bot"
           git config --global user.email "bot@hidrometro"
-          git add dados/historico.csv dados/log.txt
+          git add dados/historico.csv dados/log.txt dados/alertas_enviados.json || true
           git diff --staged --quiet || git commit -m "Leitura automática - $(date +'%d/%m/%Y %H:%M')"
           git push
