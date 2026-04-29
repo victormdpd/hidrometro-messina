@@ -17,7 +17,6 @@ DESTINATARIOS = [
 ]
 COPIA = [
     "suporte@mdpd.com.br",
-    "danielns@mdpd.com.br",
 ]
 
 GATILHOS = [30, 50, 70, 80, 85, 90, 95, 100]
