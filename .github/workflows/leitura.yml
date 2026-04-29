@@ -41,6 +41,9 @@ jobs:
         run: |
           git config --global user.name "hidrometro-bot"
           git config --global user.email "bot@hidrometro"
-          git add dados/historico.csv dados/log.txt dados/alertas_enviados.json || true
+          git add dados/historico.csv dados/log.txt
+          if [ -f dados/alertas_enviados.json ]; then
+            git add dados/alertas_enviados.json
+          fi
           git diff --staged --quiet || git commit -m "Leitura automática - $(date +'%d/%m/%Y %H:%M')"
           git push
