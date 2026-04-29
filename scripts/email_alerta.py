@@ -13,10 +13,10 @@ CONFIG_FILE = ROOT / "dados" / "config.json"
 REMETENTE = "victor@mdpd.com.br"
 REMETENTE_NOME = "MD Packet Digital"
 DESTINATARIOS = [
-    "victor.vallenthe@gmail.com",
+    "admvillamessina@gmail.com",
 ]
 COPIA = [
-    "victor@mdpd.com.br",
+    "suporte@mdpd.com.br",
     "danielns@mdpd.com.br",
 ]
 
