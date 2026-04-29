@@ -19,6 +19,7 @@ API_URL = "https://backend.metam.com.br/api/supervisory/public/ThNkAJvagP?timezo
 CONFIG_PADRAO = {
     "leitura_inicial_m3": 6982.53,
     "data_leitura_inicial": "2026-04-15",
+    "data_leitura_inicial_hora": "08:00",
     "data_proxima_leitura": "2026-05-15",
     "consumo_minimo_m3": 2160.0,
     "tarifa_dentro_minimo": 6.4720,
@@ -46,6 +47,7 @@ def carregar_config():
         cfg.setdefault("tarifa_dentro_minimo", 6.4720)
         cfg.setdefault("tarifa_minimo", 7.4143)
         cfg.setdefault("tarifa_excedente", 16.3115)
+        cfg.setdefault("data_leitura_inicial_hora", "08:00")
         return cfg
     return CONFIG_PADRAO
 
@@ -81,8 +83,13 @@ def calcular_custo(consumo_m3, minimo, tarifa_dentro_minimo, tarifa_minimo, tari
 
 
 def calcular_dados(valor_atual, config):
-    hoje = date.today()
-    data_inicial = date.fromisoformat(config["data_leitura_inicial"])
+    agora = datetime.now()
+    hoje = agora.date()
+
+    # Início do ciclo com hora exata
+    hora_inicio = config.get("data_leitura_inicial_hora", "08:00")
+    inicio_ciclo = datetime.fromisoformat(f"{config['data_leitura_inicial']}T{hora_inicio}:00")
+
     data_proxima = date.fromisoformat(config["data_proxima_leitura"])
     minimo = config["consumo_minimo_m3"]
     leitura_inicial = config["leitura_inicial_m3"]
@@ -90,26 +97,36 @@ def calcular_dados(valor_atual, config):
     tarifa_minimo = config["tarifa_minimo"]
     tarifa_excedente = config["tarifa_excedente"]
 
-    dias_total = (data_proxima - data_inicial).days
-    dias_decorridos = (hoje - data_inicial).days
+    # Dias fracionados desde o início do ciclo
+    segundos_decorridos = (agora - inicio_ciclo).total_seconds()
+    dias_decorridos_fracao = segundos_decorridos / 86400
+
+    # Dias inteiros para exibição
+    dias_decorridos_int = int(dias_decorridos_fracao)
+    dias_total = (data_proxima - date.fromisoformat(config["data_leitura_inicial"])).days
     dias_restantes = max((data_proxima - hoje).days, 0)
 
     consumo = round(valor_atual - leitura_inicial, 2)
     percentual = round((consumo / minimo) * 100, 1)
-    media_diaria = round(consumo / dias_decorridos, 2) if dias_decorridos > 0 else 0
+
+    # Média e projeção usando dias fracionados
+    media_diaria = round(consumo / dias_decorridos_fracao, 2) if dias_decorridos_fracao > 0 else 0
     projecao = round(media_diaria * dias_total, 2)
     percentual_projecao = round((projecao / minimo) * 100, 1)
 
     custo_atual = calcular_custo(consumo, minimo, tarifa_dentro_minimo, tarifa_minimo, tarifa_excedente)
     custo_projecao = calcular_custo(projecao, minimo, tarifa_dentro_minimo, tarifa_minimo, tarifa_excedente)
 
+    log(f"Dias decorridos (fracao): {round(dias_decorridos_fracao, 4)}")
+    log(f"Media diaria: {media_diaria} m3/dia")
+
     return {
         "data": hoje.strftime("%d/%m/%Y"),
-        "hora": datetime.now().strftime("%H:%M"),
+        "hora": agora.strftime("%H:%M"),
         "valor_atual_m3": valor_atual,
         "consumo_ciclo_m3": consumo,
         "percentual_minimo": percentual,
-        "dias_decorridos": dias_decorridos,
+        "dias_decorridos": dias_decorridos_int,
         "dias_restantes": dias_restantes,
         "dias_total": dias_total,
         "media_diaria_m3": media_diaria,
@@ -163,7 +180,7 @@ def salvar_falha():
         "ultrapassou_minimo", "status"
     ]
     dados = {k: "" for k in campos}
-    dados["data"] = date.today().strftime("%d/%m/%Y")
+    dados["data"] = datetime.now().strftime("%d/%m/%Y")
     dados["hora"] = datetime.now().strftime("%H:%M")
     dados["status"] = "falha_leitura"
     salvar_csv(dados)
@@ -180,12 +197,12 @@ def main():
         salvar_csv(dados)
         log(f"Consumo no ciclo: {dados['consumo_ciclo_m3']} m3")
         log(f"% do minimo: {dados['percentual_minimo']}%")
+        log(f"Projecao: {dados['projecao_m3']} m3 ({dados['percentual_projecao']}%)")
         log(f"Custo atual: R$ {dados['custo_atual_reais']}")
         log(f"Custo projecao: R$ {dados['custo_projecao_reais']}")
         if dados["ultrapassou_minimo"]:
             log("ATENCAO: Consumo minimo ultrapassado!")
 
-        # Verificar e enviar alertas por e-mail
         try:
             from email_alerta import verificar_e_enviar
             verificar_e_enviar(dados)
