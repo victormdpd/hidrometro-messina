@@ -14,6 +14,7 @@ REMETENTE = "victor@mdpd.com.br"
 REMETENTE_NOME = "MD Packet Digital"
 DESTINATARIOS = [
     "admvillamessina@gmail.com",
+    "alvaromalato@hotmail.com",
 ]
 COPIA = [
     "suporte@mdpd.com.br",
