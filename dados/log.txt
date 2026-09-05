@@ -12992,3 +12992,19 @@
 [04/09/2026 18:12:25] ATENCAO: Consumo minimo ultrapassado!
 [04/09/2026 18:12:25] Leitura concluida
 [04/09/2026 18:12:25] ==================================================
+[04/09/2026 21:38:09] ==================================================
+[04/09/2026 21:38:09] Iniciando leitura automatica do hidrometro
+[04/09/2026 21:38:09] Ciclo: 2026-08-03 -> 2026-09-05
+[04/09/2026 21:38:09] Tentativa 1/4...
+[04/09/2026 21:38:10] Leitura capturada: 16527.87 m3
+[04/09/2026 21:38:10] Dias decorridos (fracao): 32.5682
+[04/09/2026 21:38:10] Media diaria: 70.21 m3/dia
+[04/09/2026 21:38:10] Salvo em: /home/runner/work/hidrometro-messina/hidrometro-messina/dados/historico.csv
+[04/09/2026 21:38:10] Consumo no ciclo: 2286.71 m3
+[04/09/2026 21:38:10] % do minimo: 105.9%
+[04/09/2026 21:38:10] Projecao: 2316.93 m3 (107.3%)
+[04/09/2026 21:38:10] Custo atual: R$ 36163.44
+[04/09/2026 21:38:10] Custo projecao: R$ 37149.3
+[04/09/2026 21:38:10] ATENCAO: Consumo minimo ultrapassado!
+[04/09/2026 21:38:10] Leitura concluida
+[04/09/2026 21:38:10] ==================================================
